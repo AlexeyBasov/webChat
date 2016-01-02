@@ -25,8 +25,27 @@ app.use(function(req, res, next){
   }
 });
 
+app.use(function(req, res, next){
+  if(req.url == '/forbidden'){
+    next(new Error('wops, denied!'));
+  }else{
+    next();
+  }
+});
 
 
+app.use(function(req, res){
+  res.send(404, "Page not found, sorry.");
+});
+
+app.use(function(err, req, res, next){
+  if(app.get('env') == 'development'){
+    var errorHandler = express.errorHandler();
+    errorHandler(err, req, res, next);
+  }else{
+    res.send(500);
+  }
+});
 
 
 /*
